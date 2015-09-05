@@ -1,0 +1,27 @@
+{
+    "name": "vcomedia/vco-zf-logger",
+    "description": "Zend Framework 2 logger module.",
+    "type": "library",
+    "homepage": "http://github.com/vcomedia/vco-zf-logger",
+    "license": "MIT",
+    "keywords": [
+        "zf2",
+        "logger",
+        "log filter",
+        "log writer"
+    ],
+    "authors": [
+        {
+            "name": "Vahag Dudukgian",
+            "email": "vahag@vcomedia.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": ">=2.2"
+    },
+    "autoload": {
+        "psr-0": {"VcoZfLogger": "src/"},
+        "classmap": ["Module.php"]
+    }
+}
