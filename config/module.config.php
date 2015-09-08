@@ -100,7 +100,7 @@ return array(
                 'name' => 'Zend\Log\Writer\MongoDB',
                 'options' => array(
                     'mongo' => 'doctrine.documentmanager.odm_default', //doc mgmt service name new \MongoClient('mongodb://localhost/'),
-                    //'database' => 'miller',   //comment out if driver is used above
+                    'database' => null,   //if empty and using doctrine, default doctrine odm db will be injected
                     'collection' => 'applog',
                     'save_options' => array(
                         'w' => 0    //fire and forget
