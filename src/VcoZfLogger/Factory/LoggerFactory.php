@@ -65,6 +65,10 @@ class LoggerFactory implements FactoryInterface {
             $config['processor_plugin_manager'] = $serviceLocator->get('LogProcessorManager');
         }
         
+        if(empty($config['writers'])) {
+            return;
+        }
+        
         foreach ($config['writers'] as $index => $writerConfig) {
             //inject db
             if (isset($writerConfig['options']['db'])
@@ -105,7 +109,7 @@ class LoggerFactory implements FactoryInterface {
     private function execute()
     {
         if ($this->logger->getWriters()->count() == 0) {
-            return $this->logger->addWriter(new \Zend\Log\Writer\Null);
+            return $this->logger->addWriter(new \Zend\Log\Writer\Noop());
         }
     }
 }
