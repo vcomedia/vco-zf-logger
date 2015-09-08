@@ -1,5 +1,5 @@
 ## VcoZfLogger - Zend Framework 2 logger module.
-This module extends the default headScript and headLink view helpers providing a simple means of adding CSS/JS minification capabilities to your Zend Framework 2 based applications.  Currently, [Steve (mrclay) Clay's Minify](https://github.com/mrclay/minify) library is used for all minification.  However, the minification service factory can be overriden to offer alternative minification services (i.e., Google's Closure Compiler) which we plan on including as an option shortly.
+Wrapper for Zend/Logger/Log which allows users to track exceptions, add default "extra" attributes to track and automatic injection of mail transport for mail writer and mongo client/db for mongo writer.  
 
 ## Installation
 ### Composer
