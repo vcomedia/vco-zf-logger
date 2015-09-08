@@ -13,6 +13,7 @@ namespace VcoZfLogger;
 
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\Mvc\MvcEvent;
 
 /**
  * Class Module
