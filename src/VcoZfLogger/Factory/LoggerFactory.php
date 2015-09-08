@@ -83,7 +83,7 @@ class LoggerFactory implements FactoryInterface {
                 $config['writers'][$index]['options']['transport'] = $serviceLocator->get($writerConfig['options']['transport']);
             }
 
-            //TODO: inject mongo config
+            //inject mongo config from doctrine
             if (in_array($writerConfig['name'], array('mongodb', 'Zend\Log\Writer\MongoDB'))
                 && isset($writerConfig['options']['mongo']) 
                 && is_string($writerConfig['options']['mongo'])
