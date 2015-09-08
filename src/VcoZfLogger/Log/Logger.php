@@ -2,7 +2,6 @@
 namespace VcoZfLogger\Log;
 
 use Zend\Log\Logger as ZendLogger;
-use Zend\Log\Logger;
 
 /**
  * Class Logger
