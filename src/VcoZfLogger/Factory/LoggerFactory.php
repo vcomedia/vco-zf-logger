@@ -21,7 +21,7 @@ class LoggerFactory implements FactoryInterface {
      */
     public function createService (ServiceLocatorInterface $serviceLocator) {
         $config = $serviceLocator->get('Config');
-        $config = $this->configuration($config);
+        $config = $this->configuration($config, $serviceLocator);
         
         $this->logger = new Logger($config);
         $this->execute();
@@ -33,7 +33,7 @@ class LoggerFactory implements FactoryInterface {
      * @param array $config
      * @return array $config
      */
-    protected function configuration(array $config)
+    protected function configuration(array $config, ServiceLocatorInterface $serviceLocator)
     {
         $config = (isset($config['VcoZfLogger']) && is_array($config['VcoZfLogger'])) ? $config['VcoZfLogger'] : array(); 
         
