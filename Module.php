@@ -15,7 +15,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zend\Mvc\MvcEvent;
+use Zend\EventManager\EventInterface;
 
 /**
  * Class Module
@@ -28,7 +28,7 @@ use Zend\Mvc\MvcEvent;
 class Module implements ConfigProviderInterface, ServiceProviderInterface, BootstrapListenerInterface, AutoloaderProviderInterface {
 
     
-    public function onBootstrap (MvcEvent $e) {
+    public function onBootstrap (EventInterface $e) {
 //         $eventManager = $e->getApplication()->getEventManager();
 //         $moduleRouteListener = new ModuleRouteListener();
 //         $moduleRouteListener->attach($eventManager);
