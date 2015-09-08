@@ -8,6 +8,11 @@ use VcoZfLogger\Log\Logger;
 class LoggerFactory implements FactoryInterface {
 
     /**
+     * @var  VcoZfLogger\Log\Logger
+     */
+    protected $logger;
+    
+    /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator            
@@ -16,8 +21,22 @@ class LoggerFactory implements FactoryInterface {
      */
     public function createService (ServiceLocatorInterface $serviceLocator) {
         $config = $serviceLocator->get('Config');
-        $config = (isset($config['VcoZfLogger']) && is_array($config['VcoZfLogger'])) ? $config['VcoZfLogger'] : null; 
-
+        $config = $this->configuration($config);
+        
+        $this->logger = new Logger($config);
+        $this->execute();
+        
+        return $this->logger;
+    }
+    
+    /**
+     * @param array $config
+     * @return array $config
+     */
+    protected function configuration(array $config)
+    {
+        $config = (isset($config['VcoZfLogger']) && is_array($config['VcoZfLogger'])) ? $config['VcoZfLogger'] : array(); 
+        
         if (isset($config['writer_plugin_manager'])
             && is_string($config['writer_plugin_manager'])
             && $serviceLocator->has($config['writer_plugin_manager'])
@@ -65,8 +84,25 @@ class LoggerFactory implements FactoryInterface {
             }
 
             //TODO: inject mongo config
-        }
+            if (in_array($writerConfig['name'], array('mongodb', 'Zend\Log\Writer\MongoDB'))
+                && isset($writerConfig['options']['mongo']) 
+                && is_string($writerConfig['options']['mongo'])
+                && $serviceLocator->has($writerConfig['options']['mongo'])
+            ){
+                $config['writers'][$index]['options']['mongo'] = $serviceLocator->get($writerConfig['options']['mongo'])->getConnection()->getMongo();
+            }            
+        } 
         
-        return new Logger($config);
+        return $config;
+    }
+    
+    /**
+     * @return Logger
+     */
+    private function execute()
+    {
+        if ($this->logger->getWriters()->count() == 0) {
+            return $this->logger->addWriter(new \Zend\Log\Writer\Null);
+        }
     }
 }
