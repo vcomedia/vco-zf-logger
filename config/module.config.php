@@ -110,7 +110,7 @@ return array(
             'mongowriter' => array(
                 'name' => 'Zend\Log\Writer\MongoDB',
                 'options' => array(
-                    'mongo' => new MongoClient('mongodb://localhost/'),
+                    'mongo' => new \MongoClient('mongodb://localhost/'),
                     'database' => 'miller',
                     'collection' => 'applog',
                     'save_options' => array(
