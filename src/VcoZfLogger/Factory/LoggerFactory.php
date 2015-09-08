@@ -15,12 +15,12 @@ class LoggerFactory implements FactoryInterface {
      * @return mixed
      */
     public function createService (ServiceLocatorInterface $serviceLocator) {
-        $realServiceLocator = $serviceLocator->getServiceLocator();
-        $config = $realServiceLocator->get('Config');
+        //$realServiceLocator = $serviceLocator->getServiceLocator();
+        $config = $serviceLocator->get('Config');
 
         $config = (isset($config['VcoZfLogger']) && is_array($config['VcoZfLogger'])) ? $config['VcoZfLogger'] : null; 
         //TODO: inject transport and mongo config here
-        die(print_r($config));
+        die(print_r($config));  
         $logger = new Logger($config);
         return $logger;
     }
