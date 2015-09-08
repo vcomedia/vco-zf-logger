@@ -72,7 +72,7 @@ return array(
                         'from' => 'v@vahag.co',
                         'to' => 'v@vahag.co'
                     ),
-                    'subject_prepend_text' => 'aaaa',
+                    'subject_prepend_text' => 'Application Exception',
                     'transport' => 'mail.transport',  //service name pointing to transport
                     'filters' => array(
                         'priority' => array(
@@ -103,7 +103,7 @@ return array(
                     'database' => 'miller',
                     'collection' => 'applog',
                     'save_options' => array(
-                        'w' => 0
+                        'w' => 0    //fire and forget
                     )
                 ),
                 'filters' => array(

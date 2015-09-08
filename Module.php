@@ -29,12 +29,6 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface, Boots
 
     
     public function onBootstrap (EventInterface $e) {
-//         $eventManager = $e->getApplication()->getEventManager();
-//         $moduleRouteListener = new ModuleRouteListener();
-//         $moduleRouteListener->attach($eventManager);
-
-        //$sm->get('VcoLogger')->add
-        
         /**
          * Log any Uncaught Exceptions, including all Exceptions in the stack
           */
@@ -42,19 +36,26 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface, Boots
             ->getEventManager()
             ->getSharedManager();
         $sm = $e->getApplication()->getServiceManager();
-        $sharedManager->attach('Zend\Mvc\Application', 'dispatch.error', 
-            function  ($e) use( $sm) {
-                if ($e->getParam('exception')) {
-                    $ex = $e->getParam('exception');
-                    do {
-                        $sm->get('VcoZfLogger')
-                            ->crit(
-                            sprintf("%s:%d %s (%d) [%s]", $ex->getFile(), 
-                                $ex->getLine(), $ex->getMessage(), 
-                                $ex->getCode(), get_class($ex)));
-                    } while ($ex = $ex->getPrevious());
-                }
-            });  
+        
+        $config = $sm->get('Config');
+        if(isset($config['VcoZfLogger']) 
+            && isset($config['VcoZfLogger']['exceptionhandler']) 
+            && $config['VcoZfLogger']['exceptionhandler'] === true
+        ) { 
+            $sharedManager->attach('Zend\Mvc\Application', 'dispatch.error', 
+                function  ($e) use( $sm) {
+                    if ($e->getParam('exception')) {
+                        $ex = $e->getParam('exception');
+                        do {
+                            $sm->get('VcoZfLogger')
+                                ->crit(
+                                sprintf("%s:%d %s (%d) [%s]", $ex->getFile(), 
+                                    $ex->getLine(), $ex->getMessage(), 
+                                    $ex->getCode(), get_class($ex)));
+                        } while ($ex = $ex->getPrevious());
+                    }
+                });  
+        }
     }    
      
     /**
