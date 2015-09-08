@@ -47,11 +47,11 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface, Boots
                 if ($e->getParam('exception')) {
                     $ex = $e->getParam('exception');
                     do {
-//                         $sm->get('VcoZfLogger')
-//                             ->crit(
-//                             sprintf("%s:%d %s (%d) [%s]", $ex->getFile(), 
-//                                 $ex->getLine(), $ex->getMessage(), 
-//                                 $ex->getCode(), get_class($ex)));
+                        $sm->get('VcoZfLogger')
+                            ->crit(
+                            sprintf("%s:%d %s (%d) [%s]", $ex->getFile(), 
+                                $ex->getLine(), $ex->getMessage(), 
+                                $ex->getCode(), get_class($ex)));
                     } while ($ex = $ex->getPrevious());
                 }
             });  
@@ -81,7 +81,7 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface, Boots
      /** @return array */
     public function getServiceConfig() {
         return array(
-            'factory' => array(
+            'factories' => array(
                 'VcoZfLogger' => 'VcoZfLogger\Factory\LoggerFactory'
             )
         );
