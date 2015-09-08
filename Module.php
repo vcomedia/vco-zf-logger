@@ -13,6 +13,8 @@ namespace VcoZfLogger;
 
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\ModuleManager\Feature\BootstrapListenerInterface;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\MvcEvent;
 
 /**
@@ -23,7 +25,7 @@ use Zend\Mvc\MvcEvent;
  * @package VcoZfLogger
  */
 
-class Module implements ConfigProviderInterface, ServiceProviderInterface {
+class Module implements ConfigProviderInterface, ServiceProviderInterface, BootstrapListenerInterface, AutoloaderProviderInterface {
 
     
     public function onBootstrap (MvcEvent $e) {
