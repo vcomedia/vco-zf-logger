@@ -73,18 +73,7 @@ return array(
                         'to' => 'v@vahag.co'
                     ),
                     'subject_prepend_text' => 'aaaa',
-                    'transport' => array(
-                        'type' => 'smtp',
-                        'options' => array(
-                            'host' => 'smtp.gmail.com',
-                            'connection_class' => 'plain',
-                            'connection_config' => array(
-                                'username' => 'info@milleropp.com',
-                                'password' => 'MiL23416',
-                                'ssl' => 'tls'
-                            )
-                        )
-                    ),
+                    'transport' => 'mail.transport',  //service name pointing to transport
                     'filters' => array(
                         'priority' => array(
                             'name' => 'priority',
