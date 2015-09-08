@@ -24,6 +24,36 @@ use Zend\ModuleManager\Feature\ServiceProviderInterface;
 
 class Module implements ConfigProviderInterface, ServiceProviderInterface {
 
+    
+    public function onBootstrap (MvcEvent $e) {
+//         $eventManager = $e->getApplication()->getEventManager();
+//         $moduleRouteListener = new ModuleRouteListener();
+//         $moduleRouteListener->attach($eventManager);
+
+        //$sm->get('VcoLogger')->add
+        
+        /**
+         * Log any Uncaught Exceptions, including all Exceptions in the stack
+          */
+        $sharedManager = $e->getApplication()
+            ->getEventManager()
+            ->getSharedManager();
+        $sm = $e->getApplication()->getServiceManager();
+        $sharedManager->attach('Zend\Mvc\Application', 'dispatch.error', 
+            function  ($e) use( $sm) {
+                if ($e->getParam('exception')) {
+                    $ex = $e->getParam('exception');
+                    do {
+                        $sm->get('VcoZfLogger')
+                            ->crit(
+                            sprintf("%s:%d %s (%d) [%s]", $ex->getFile(), 
+                                $ex->getLine(), $ex->getMessage(), 
+                                $ex->getCode(), get_class($ex)));
+                    } while ($ex = $ex->getPrevious());
+                }
+            });  
+    }    
+     
     /**
      * @return array
      */
@@ -48,9 +78,8 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface {
      /** @return array */
     public function getServiceConfig() {
         return array(
-            'invokables' => array(
-                'VcoZfLogger\Service\MinifyJsService' => 'VcoZfLogger\Service\MinifyJsService',
-                'VcoZfLogger\Service\MinifyCssService' => 'VcoZfLogger\Service\MinifyCssService'
+            'factory' => array(
+                'VcoZfLogger' => 'VcoZfLogger\Factory\LoggerFactory'
             )
         );
     }
