@@ -2,6 +2,7 @@
 namespace VcoZfLogger\Log;
 
 use Zend\Log\Logger as ZendLogger;
+use Zend\Log\Logger;
 
 /**
  * Class Logger
@@ -12,7 +13,19 @@ class Logger extends ZendLogger
     /**
      * @var array
      */
-    private $customExtra = array();
+    private $defaultExtra = array();
+    
+    public function __construct($options = null)
+    {
+        $defaultExtra = array(
+            'sessionId' => session_id(),
+            'host'      => !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'CLI',
+            'ip'        => !empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unavailable'
+        );
+        $this->setDefaultExtra($defaultExtra);
+        
+        parent::__construct($options);
+    }
 
     /**
      * @param int   $priority
@@ -23,37 +36,29 @@ class Logger extends ZendLogger
      */
     final public function log($priority, $message, $extra = array())
     {
-        $customExtra = array(
-            'Zf2Logger' => array(
-                'sessionId' => session_id(),
-                'host'      => !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'CLI',
-                'ip'        => !empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unavailable'
-            )
-        );
-
-        return parent::log($priority, $message, array_merge($extra, $customExtra, $this->customExtra));
+        return parent::log($priority, $message, array_merge($extra, $this->defaultExtra));
     }
 
     /**
-     * @param array $customExtra
+     * @param array $defaultExtra
      *
      * @return Logger
      */
-    public function setCustomExtra(array $customExtra)
+    public function setDefaultExtra(array $defaultExtra)
     {
-        $this->customExtra = $customExtra;
+        $this->defaultExtra = $defaultExtra;
 
         return $this;
     }
 
     /**
-     * @param array $customExtra
+     * @param array $defaultExtra
      *
      * @return Logger
      */
-    public function addCustomExtra(array $customExtra)
+    public function addDefaultExtra(array $defaultExtra)
     {
-        $this->customExtra[] = $customExtra;
+        $this->defaultExtra[] = $defaultExtra;
 
         return $this;
     }
@@ -61,8 +66,8 @@ class Logger extends ZendLogger
     /**
      * @return array
      */
-    public function getCustomExtra()
+    public function getDefaultExtra()
     {
-        return $this->customExtra;
+        return $this->defaultExtra;
     }
 }
