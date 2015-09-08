@@ -89,7 +89,7 @@ class LoggerFactory implements FactoryInterface {
                 && is_string($writerConfig['options']['mongo'])
                 && $serviceLocator->has($writerConfig['options']['mongo'])
             ){
-                die(print_r($serviceLocator->get($writerConfig['options']['mongo'])->getConnection()->getDefaultDB()));
+                die(print_r($serviceLocator->get($writerConfig['options']['mongo'])->getConfiguration()->getDefaultDB()));
                 $config['writers'][$index]['options']['mongo'] = $serviceLocator->get($writerConfig['options']['mongo'])->getConnection()->getMongo();
             }            
         } 
