@@ -67,7 +67,6 @@ class LoggerFactory implements FactoryInterface {
             //TODO: inject mongo config
         }
         
-        $logger = new Logger($config);
-        return $logger;
+        return new Logger($config);
     }
 }
