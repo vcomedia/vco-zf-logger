@@ -1,5 +1,5 @@
 ## VcoZfLogger - Zend Framework 2 logger module.
-Wrapper for Zend/Logger/Log which allows users to track exceptions, add default "extra" attributes, automatic injection of mail transport for the mail writer and automatic mongo client/db for the mongo writer.  Inspired by eddiejaoude/zf2-logger.
+Wrapper for Zend/Logger/Log which allows users to track exceptions, add default "extra" attributes, automatic injection of mail transport for the mail writer and automatic mongoClient injection from doctrine odm for the mongo writer.  Inspired by eddiejaoude/zf2-logger.
 
 ## Installation
 ### Composer
