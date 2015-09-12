@@ -1,5 +1,5 @@
 ## VcoZfLogger - Zend Framework 2 logger module.
-Wrapper for Zend/Logger/Log which allows users to track exceptions, add default "extra" attributes, automatic injection of mail transport for the mail writer and automatic mongo client/db for the mongo writer.  
+Wrapper for Zend/Logger/Log which allows users to track exceptions, add default "extra" attributes, automatic injection of mail transport for the mail writer and automatic mongo client/db for the mongo writer.  Inspired by eddiejaoude/zf2-logger which is now depercated.
 
 ## Installation
 ### Composer
@@ -166,7 +166,7 @@ $logger->log(\Zend\Log\Logger::INFO, 'Some message to log.');
     }
  ```
  
- * Note: The following 'extra' parameters are added by default to all logged messages:
+* Note: The following 'extra' parameters are added by default to all logged messages:
 
  ```php
          $defaultExtra = array(
@@ -176,7 +176,7 @@ $logger->log(\Zend\Log\Logger::INFO, 'Some message to log.');
         );
  ```
  
- You can remove default 'extra' options using setDefaultExtra method :
+* You can remove default 'extra' options or set your own at once using setDefaultExtra method:
  
   ```php
     public function onBootstrap (MvcEvent $e) {
@@ -190,6 +190,24 @@ $logger->log(\Zend\Log\Logger::INFO, 'Some message to log.');
     }
   ```
  
+ * Instead of using `VcoZfLogger` as logger service name, usa an alias for decoupling: 
+
+i.e.
+```
+    //...
+    'aliases'    => array(
+        'Logger' => 'VcoZfLogger'
+    ),
+    //...
+```
+
+Then your usage in your code becomes...
+
+```php
+    //...
+    $serviceLocator->get('Logger')->emerg('Emergency message');
+    //...
+```
 
 ## License
 The MIT License (MIT)
