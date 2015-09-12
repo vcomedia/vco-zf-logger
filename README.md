@@ -135,12 +135,6 @@ return array(
                             'suppress' => true
                         )
                     )
-                ),
-                'formatter' => array(
-                    'name' => 'simple',
-                    'options' => array(
-                        'dateTimeFormat' => 'Y-m-d H:i:s'
-                    )
                 )
             )
         )
