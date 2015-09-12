@@ -28,8 +28,6 @@ Wrapper for Zend/Logger/Log which allows users to track exceptions, add default 
   ```php
  <?php
 
-The configuration array returned by accessing the top level 'VcoZfLogger' key is passed directly into the Log constructor. Below is an example utilizing a number of writers and various options.
-
 return array(
     'VcoZfLogger' => array(
         'exceptionhandler' => true,
@@ -150,6 +148,8 @@ return array(
 );
 
   ```
+
+The configuration array returned by the top level 'VcoZfLogger' key is passed directly into the Log class constructor.
 
 ## Options
 
