@@ -190,7 +190,7 @@ $logger->log(\Zend\Log\Logger::INFO, 'Some message to log.');
     }
   ```
  
- * Instead of using `VcoZfLogger` as logger service name, usa an alias for decoupling: 
+* Instead of using `VcoZfLogger` as logger service name, usa an alias for decoupling: 
 
 i.e.
 ```
