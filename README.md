@@ -1,5 +1,5 @@
 ## VcoZfLogger - Zend Framework 2 logger module.
-Wrapper for Zend/Logger/Log which allows users to track exceptions, add default "extra" attributes to track and automatic injection of mail transport for mail writer and mongo client/db for mongo writer.  
+Wrapper for Zend/Logger/Log which allows users to track exceptions, add default "extra" attributes, automatic injection of mail transport for the mail writer and automatic mongo client/db for the mongo writer.  
 
 ## Installation
 ### Composer
@@ -28,10 +28,127 @@ Wrapper for Zend/Logger/Log which allows users to track exceptions, add default 
   ```php
  <?php
 
- return array(
-     'VcoZfLogger' => array(
-     )
- );
+The configuration array returned by accessing the top level 'VcoZfLogger' key is passed directly into the Log constructor. Below is an example utilizing a number of writers and various options.
+
+return array(
+    'VcoZfLogger' => array(
+        'exceptionhandler' => true,
+        'errorhandler' => true, // note: this disables native error handler
+        'fatal_error_shutdownfunction' => true,
+        'writers' => array(
+            'standardstreamwriter' => array(
+                'name' => 'stream',
+                'options' => array(
+                    'stream' => 'data/log/application.log',
+                    'filters' => array(
+                        'priority' => array(
+                            'name' => 'priority',
+                            'options' => array(
+                                'priority' => \Zend\Log\Logger::WARN
+                            )
+                        ),
+                        'suppress' => array(
+                            'name' => 'suppress',
+                            'options' => array(
+                                'suppress' => false
+                            )
+                        )
+                    ),
+                    'formatter' => array(
+                        'name' => 'simple',
+                        'options' => array(
+                            'dateTimeFormat' => 'Y-m-d H:i:s'
+                        )
+                    )
+                )
+            ),
+            // setup instructions - https://craig.is/writing/chrome-logger
+            // chrome plugin - https://chrome.google.com/webstore/detail/chromephp/noaneddfkdjfnfdakjjmocngnfkfehhd
+            'chromphpwriter' => array(
+                'name' => 'chromephp',
+                'options' => array(
+                    'filters' => array(
+                        'priority' => array(
+                            'name' => 'priority',
+                            'options' => array(
+                                'priority' => \Zend\Log\Logger::DEBUG
+                            )
+                        ),
+                        'suppress' => array(
+                            'name' => 'suppress',
+                            'options' => array(
+                                'suppress' => false
+                            )
+                        )
+                    )
+                )
+            ),
+            'emailwriter' => array(
+                'name' => 'mail',
+                'options' => array(
+                    'mail' => array(
+                        'from' => 'from@domain.com',
+                        'to' => 'to@domain.com'
+                    ),
+                    'subject_prepend_text' => 'Application Exception',
+                    'transport' => 'mail.transport',  //service name pointing to mail transport
+                    'filters' => array(
+                        'priority' => array(
+                            'name' => 'priority',
+                            'options' => array(
+                                'priority' => \Zend\Log\Logger::ERR
+                            )
+                        ),
+                        'suppress' => array(
+                            'name' => 'suppress',
+                            'options' => array(
+                                'suppress' => false
+                            )
+                        )
+                    ),
+                    'formatter' => array(
+                        'name' => 'simple',
+                        'options' => array(
+                            'dateTimeFormat' => 'Y-m-d H:i:s'
+                        )
+                    )
+                )
+            ),
+            'mongowriter' => array(
+                'name' => 'Zend\Log\Writer\MongoDB',
+                'options' => array(
+                    'mongo' => 'doctrine.documentmanager.odm_default', //service name pointing to doctrine document manager or standard array to configure mongoClient
+                    'database' => null,   //if empty and using service name in above option, default doctrine odm db will be injected
+                    'collection' => 'application.log',
+                    'save_options' => array(
+                        'w' => 0    //fire and forget
+                    )
+                ),
+                'filters' => array(
+                    'priority' => array(
+                        'name' => 'priority',
+                        'options' => array(
+                            'priority' => \Zend\Log\Logger::DEBUG
+                        )
+                    ),
+                    'suppress' => array(
+                        'name' => 'suppress',
+                        'options' => array(
+                            'suppress' => true
+                        )
+                    )
+                ),
+                'formatter' => array(
+                    'name' => 'simple',
+                    'options' => array(
+                        'dateTimeFormat' => 'Y-m-d H:i:s'
+                    )
+                )
+            )
+        )
+    )
+);
+
   ```
 
 ## Options
