@@ -149,11 +149,53 @@ return array(
 
   ```
 
-The configuration array returned by the top level 'VcoZfLogger' key is passed directly into the Log class constructor.
+Note: The configuration array returned by the top level 'VcoZfLogger' key is passed directly into the Log class constructor with the exception of the mail transport and mongo credential injection which are both optional.
 
-## Options
+* To access your logger and log a message, you can do something like so:
 
-## Notes
+ ```php
+$logger = $this->getServiceLocator()->get('VcoZfLogger');
+$logger->log(\Zend\Log\Logger::INFO, 'Some message to log.');
+ ```
+ 
+* To add additional 'extra' parameters to all logged messages, add the following to onBootstrap method in Module.php:
+
+ ```php
+    public function onBootstrap (MvcEvent $e) {
+        $eventManager = $e->getApplication()->getEventManager();
+        $moduleRouteListener = new ModuleRouteListener();
+        $moduleRouteListener->attach($eventManager);
+        
+        $sm = $e->getApplication()->getServiceManager();
+        $logger = $sm->get('VcoZfLogger');
+        $logger->addDefaultExtra(array('foo' => 'bar'));
+    }
+ ```
+ 
+ * Note: The following 'extra' parameters are added by default to all logged messages:
+
+ ```php
+         $defaultExtra = array(
+            'sessionId' => session_id(),
+            'host'      => !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'CLI',
+            'ip'        => !empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unavailable'
+        );
+ ```
+ 
+ You can remove default 'extra' options using setDefaultExtra method :
+ 
+  ```php
+    public function onBootstrap (MvcEvent $e) {
+        $eventManager = $e->getApplication()->getEventManager();
+        $moduleRouteListener = new ModuleRouteListener();
+        $moduleRouteListener->attach($eventManager);
+        
+        $sm = $e->getApplication()->getServiceManager();
+        $logger = $sm->get('VcoZfLogger');
+        $logger->setDefaultExtra(array());
+    }
+  ```
+ 
 
 ## License
 The MIT License (MIT)
