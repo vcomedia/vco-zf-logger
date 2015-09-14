@@ -16,6 +16,7 @@ use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\EventManager\EventInterface;
+use Zend\Log\LoggerAwareInterface;
 
 /**
  * Class Module
@@ -25,23 +26,22 @@ use Zend\EventManager\EventInterface;
  * @package VcoZfLogger
  */
 
-class Module implements ConfigProviderInterface, ServiceProviderInterface, BootstrapListenerInterface, AutoloaderProviderInterface {
+class Module implements ConfigProviderInterface, ServiceProviderInterface, 
+    BootstrapListenerInterface, AutoloaderProviderInterface {
 
-    
     public function onBootstrap (EventInterface $e) {
         /**
          * Log any Uncaught Exceptions, including all Exceptions in the stack
-          */
+         */
         $sharedManager = $e->getApplication()
             ->getEventManager()
             ->getSharedManager();
         $sm = $e->getApplication()->getServiceManager();
         
         $config = $sm->get('Config');
-        if(isset($config['VcoZfLogger']) 
-            && isset($config['VcoZfLogger']['exceptionhandler']) 
-            && $config['VcoZfLogger']['exceptionhandler'] === true
-        ) { 
+        if (isset($config['VcoZfLogger']) &&
+             isset($config['VcoZfLogger']['exceptionhandler']) &&
+             $config['VcoZfLogger']['exceptionhandler'] === true) {
             $sharedManager->attach('Zend\Mvc\Application', 'dispatch.error', 
                 function  ($e) use( $sm) {
                     if ($e->getParam('exception')) {
@@ -54,18 +54,19 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface, Boots
                                     $ex->getCode(), get_class($ex)));
                         } while ($ex = $ex->getPrevious());
                     }
-                });  
+                });
         }
-    }    
-     
+    }
+
     /**
+     *
      * @return array
      */
     public function getConfig () {
         return require __DIR__ . '/config/module.config.php';
     }
-
-    //TODO: remove following method and autoload_classmap.php file
+    
+    // TODO: remove following method and autoload_classmap.php file
     public function getAutoloaderConfig () {
         return array(
             'Zend\Loader\ClassMapAutoloader' => array(
@@ -79,11 +80,20 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface, Boots
         );
     }
 
-     /** @return array */
-    public function getServiceConfig() {
+    /**
+     * @return array
+     */
+    public function getServiceConfig () {
         return array(
             'factories' => array(
                 'VcoZfLogger' => 'VcoZfLogger\Factory\LoggerFactory'
+            ),
+            'initializers' => array(
+                function  ($instance, $sm) {
+                    if ($instance instanceof LoggerAwareInterface) {
+                        $instance->setLogger($sm->get('VcoZfLogger'));
+                    }
+                }
             )
         );
     }

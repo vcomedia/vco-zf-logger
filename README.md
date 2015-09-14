@@ -209,6 +209,21 @@ Then your usage in your code becomes...
     //...
 ```
 
+* You can easily inject a logger into any service by implmenting the LoggerAwareInterface: 
+
+i.e.
+```
+    //...
+    /**
+     * Set logger instance
+     *
+     * @param LoggerInterface
+     * @return void
+     */
+    public function setLogger(LoggerInterface $logger);
+    //...
+```
+
 ## License
 The MIT License (MIT)
 
