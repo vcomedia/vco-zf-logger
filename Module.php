@@ -17,6 +17,7 @@ use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\EventManager\EventInterface;
 use Zend\Log\LoggerAwareInterface;
+use VcoZfLogger\Log\Logger;
 
 /**
  * Class Module
@@ -44,11 +45,15 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface,
              $config['VcoZfLogger']['exceptionhandler'] === true) {
             $sharedManager->attach('Zend\Mvc\Application', 'dispatch.error', 
                 function  ($e) use( $sm) {
-                    if ($e->getParam('exception')) {
-                        $ex = $e->getParam('exception');
+                    $response = $e->getResponse();
+                    $ex = $e->getParam('exception');
+                    $logger = $sm->get('VcoZfLogger');
+                    $statusCode = $response->getStatusCode();
+                    die(var_dump($statusCode));
+                    $priority = $statusCode == 404 ? Logger::ERR : Logger::CRIT;
+                    if ($ex) {
                         do {
-                            $sm->get('VcoZfLogger')
-                                ->crit(
+                            $logger->log($priority, 
                                 sprintf("%s:%d %s (%d) [%s]", $ex->getFile(), 
                                     $ex->getLine(), $ex->getMessage(), 
                                     $ex->getCode(), get_class($ex)));
