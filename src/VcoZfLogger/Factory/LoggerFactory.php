@@ -23,7 +23,9 @@ class LoggerFactory implements FactoryInterface {
         $config = $serviceLocator->get('Config');
         $config = $this->configuration($config, $serviceLocator);
         
-        $this->logger = new Logger($config);
+        $authService = $serviceLocator->has('Zend\Authentication\AuthenticationService') ? $serviceLocator->get('Zend\Authentication\AuthenticationService') : null;
+        
+        $this->logger = new Logger($config, $authService);
         $this->execute();
         
         return $this->logger;
