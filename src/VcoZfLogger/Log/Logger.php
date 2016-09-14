@@ -27,12 +27,15 @@ class Logger extends ZendLogger
         
         if($authService && $authService->hasIdentity()) {
             $identity = $authService->getIdentity();
+            $userID = null;
             if(method_exists($identity, 'getId')) {
                 $userID = $identity->getID();
             } elseif (property_exists($identity, 'getId')) {
                 $userID = $identity['getId'];
             }
-            $defaultExtra['user'] = $userID;
+            if($userID) {
+                $defaultExtra['user'] = $userID;
+            }
         }
         
         $this->setDefaultExtra($defaultExtra);
