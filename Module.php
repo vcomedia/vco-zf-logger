@@ -48,7 +48,7 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface,
                     $response = $e->getResponse();
                     $ex = $e->getParam('exception');
                     $logger = $sm->get('VcoZfLogger');
-                    $statusCode = $response->getStatusCode();
+                    $statusCode = method_exists($response, 'getStatusCode')  ? $response->getStatusCode() : null;
                     $priority = $statusCode == 404 ? Logger::ERR : Logger::CRIT;
                     if ($ex) {
                         do {
